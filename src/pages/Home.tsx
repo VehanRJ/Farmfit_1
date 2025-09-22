@@ -13,7 +13,7 @@ import {
   Droplets,
   Bug
 } from "lucide-react";
-import heroImage from "@/assets/hero-agriculture.jpg";
+import heroImage from "@/assets/agri.webp";
 
 const Home = () => {
   const features = [
