@@ -58,7 +58,7 @@ const Navbar = () => {
 
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-3 bg-background/5 border border-border backdrop-blur-lg py-1 px-1 rounded-full shadow-lg w-[91.6vh] ml-4 mr-4 ">
+        <div className="hidden md:flex items-center gap-3 bg-background/5 border border-border backdrop-blur-lg py-1 px-1 rounded-full shadow-lg w-[79.75vh] ml-4 mr-4 ">
           {navItems.map((item) => {
             const isTabActive = isActive(item.path);
             return (
