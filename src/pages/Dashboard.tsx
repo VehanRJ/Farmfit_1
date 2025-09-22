@@ -20,6 +20,9 @@ import {
 } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import dashboardPreview from "@/assets/dashboard-preview.jpg";
+import LiveAlerts from "../pages/LiveAlerts";
+import WeatherStatus from "../components/WeatherStatus";
+import EnvironmentalConditions from "@/components/EnvironmentalConditions";
 
 const Dashboard = () => {
   const [selectedTimeRange, setSelectedTimeRange] = useState("7d");
@@ -45,32 +48,7 @@ const Dashboard = () => {
     { date: "2024-01-07", temp: 28, humidity: 52 }
   ];
 
-  const alerts = [
-    {
-      id: 1,
-      type: "warning",
-      title: "Pest Risk - Sector 3",
-      description: "Increased aphid activity detected in northern fields",
-      time: "2 hours ago",
-      severity: "medium"
-    },
-    {
-      id: 2,
-      type: "info",
-      title: "Irrigation Scheduled",
-      description: "Automatic irrigation will begin at 6:00 AM tomorrow",
-      time: "4 hours ago",
-      severity: "low"
-    },
-    {
-      id: 3,
-      type: "alert",
-      title: "Low Soil Moisture",
-      description: "Sector 7 moisture levels below optimal threshold",
-      time: "6 hours ago",
-      severity: "high"
-    }
-  ];
+
 
   const soilMetrics = [
     { label: "Soil Moisture", value: 32, unit: "%", status: "low", icon: Droplets },
@@ -97,7 +75,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-secondary/30 p-4 md:p-6">
+    <div className="min-h-screen bg-secondary/30 p-4 md:p-6 mt-[10vh]">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -130,48 +108,6 @@ const Dashboard = () => {
             </Button>
           </div>
         </div>
-
-        {/* Spectral Health Map */}
-        <Card className="card-gradient border-0 overflow-hidden">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Satellite className="h-5 w-5 text-primary" />
-                  Spectral Health Map
-                </CardTitle>
-                <CardDescription>
-                  NDVI analysis and crop health visualization
-                </CardDescription>
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm">
-                  <Map className="h-4 w-4 mr-2" />
-                  Full Screen
-                </Button>
-                <Button variant="outline" size="sm">
-                  <Download className="h-4 w-4 mr-2" />
-                  Export
-                </Button>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="h-96 bg-primary/5 rounded-lg flex items-center justify-center relative overflow-hidden">
-              <img 
-                src={dashboardPreview} 
-                alt="Agricultural dashboard preview" 
-                className="w-full h-full object-cover rounded-lg"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg" />
-              <div className="absolute bottom-4 left-4 text-white">
-                <p className="text-sm font-medium">Live Satellite Data</p>
-                <p className="text-xs opacity-75">Last updated: 2 hours ago</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {soilMetrics.map((metric, index) => (
@@ -200,6 +136,13 @@ const Dashboard = () => {
             </Card>
           ))}
         </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <LiveAlerts />
+          <WeatherStatus />
+        </div>
+
+        <EnvironmentalConditions />
 
         {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -328,7 +271,22 @@ const Dashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {alerts.map((alert) => (
+                  {[
+                    {
+                      id: 1,
+                      title: "Low Soil Moisture",
+                      severity: "high",
+                      description: "Sector 3 moisture levels critical",
+                      time: "2 hours ago"
+                    },
+                    {
+                      id: 2,
+                      title: "Temperature Warning",
+                      severity: "medium", 
+                      description: "Above average temperatures detected",
+                      time: "4 hours ago"
+                    }
+                  ].map((alert) => (
                     <div key={alert.id} className="flex items-start space-x-4 p-4 rounded-lg bg-background/50">
                       <AlertTriangle className={`h-5 w-5 mt-0.5 ${getStatusColor(alert.severity)}`} />
                       <div className="flex-1 min-w-0">

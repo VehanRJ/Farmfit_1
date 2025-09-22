@@ -23,19 +23,75 @@ const ToastViewport = React.forwardRef<
 ToastViewport.displayName = ToastPrimitives.Viewport.displayName;
 
 const toastVariants = cva(
-  "group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-6 pr-8 shadow-lg transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full data-[state=open]:sm:slide-in-from-bottom-full",
+  `
+    group pointer-events-auto relative flex w-full items-center justify-between space-x-4 
+    overflow-hidden rounded-xl border p-6 pr-8
+    shadow-lg transition-all duration-300 ease-out
+    backdrop-blur-md
+    transform-gpu
+    hover:-translate-y-1 hover:scale-[1.02] hover:shadow-2xl
+    before:absolute before:left-0 before:top-0 before:h-full before:w-1.5 before:rounded-l-xl
+    data-[swipe=cancel]:translate-x-0
+    data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)]
+    data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)]
+    data-[swipe=move]:transition-none
+    data-[state=open]:animate-in data-[state=open]:scale-in-90
+    data-[state=closed]:animate-out data-[state=closed]:scale-out-90
+    data-[swipe=end]:animate-out
+    data-[state=closed]:fade-out-80
+    data-[state=closed]:slide-out-to-right-full
+    data-[state=open]:slide-in-from-top-full
+    data-[state=open]:sm:slide-in-from-bottom-full
+  `,
   {
     variants: {
       variant: {
-        default: "border bg-background text-foreground",
-        destructive: "destructive group border-destructive bg-destructive text-destructive-foreground",
+        default: `
+          border-transparent
+          bg-gradient-to-r from-white/80 via-white/60 to-white/80
+          text-foreground
+          dark:from-gray-800/90 dark:via-gray-800/70 dark:to-gray-800/90
+          dark:text-gray-50
+          hover:bg-gradient-to-r hover:from-white/90 hover:via-white/70 hover:to-white/90
+          before:bg-blue-500
+        `,
+        destructive: `
+          border-red-400/50
+          bg-gradient-to-r from-red-50/90 via-red-50/70 to-red-50/90
+          text-red-700
+          dark:bg-gradient-to-r dark:from-red-900/80 dark:via-red-900/60 dark:to-red-900/80
+          dark:text-red-400
+          hover:bg-gradient-to-r hover:from-red-50/95 hover:via-red-50/80 hover:to-red-50/95
+          before:bg-red-600
+        `,
+        success: `
+          border-green-400/50
+          bg-gradient-to-r from-green-50/90 via-green-50/70 to-green-50/90
+          text-green-700
+          dark:bg-gradient-to-r dark:from-green-900/80 dark:via-green-900/60 dark:to-green-900/80
+          dark:text-green-400
+          hover:bg-gradient-to-r hover:from-green-50/95 hover:via-green-50/80 hover:to-green-50/95
+          before:bg-green-500
+        `,
+        warning: `
+          border-yellow-400/50
+          bg-gradient-to-r from-yellow-50/90 via-yellow-50/70 to-yellow-50/90
+          text-yellow-700
+          dark:bg-gradient-to-r dark:from-yellow-900/80 dark:via-yellow-900/60 dark:to-yellow-900/80
+          dark:text-yellow-400
+          hover:bg-gradient-to-r hover:from-yellow-50/95 hover:via-yellow-50/80 hover:to-yellow-50/95
+          before:bg-yellow-500
+        `,
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: "success",
     },
-  },
+  }
 );
+
+
+
 
 const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,

@@ -26,6 +26,8 @@ const Login = () => {
     confirmPassword: ""
   });
 
+  const [tab, setTab] = useState("login");
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -63,6 +65,7 @@ const Login = () => {
         description: "Welcome to AgriWatch AI! Please log in.",
       });
     }, 1000);
+    navigate("/account-created")
   };
 
   return (
@@ -213,6 +216,9 @@ const Login = () => {
                     variant="hero"
                     className="w-full"
                     disabled={isLoading}
+                    onClick={()=>{
+                       setTab("login");
+                    }}
                   >
                     {isLoading ? "Creating Account..." : "Create Account"}
                   </Button>
