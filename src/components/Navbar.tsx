@@ -12,6 +12,10 @@ const Navbar = () => {
   const [activeTab, setActiveTab] = useState("Home");
   const [isMobile, setIsMobile] = useState(false);
 
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+  return localStorage.getItem("isLoggedIn") === "true";
+});
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -21,6 +25,7 @@ const Navbar = () => {
     { name: "Contact Us", path: "/contact" },
     { name: "Dashboard", path: "/dashboard" },
   ];
+
 
  const isActive = (path: string) => {
   if (path === "/") {
@@ -38,12 +43,20 @@ const Navbar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleLogin = () => {
-    navigate("/login");
-  };
+  const LoggedIn = () =>{
+    navigate('/login');
+  }
+  // inside Navbar component
+
+const handleLogout = () => {
+  localStorage.removeItem("isLoggedIn");
+  setIsLoggedIn(false);
+  navigate("/logged-out"); // optional: redirect to home after logout
+};
+
 
   return (
-    <nav className="fixed bottom-0 sm:top-0 left-1/2 -translate-x-1/2 z-50 w-max sm:w-auto mb-6 sm:pt-6">
+    <nav className="fixed left-1/2 -translate-x-1/2 z-50 w-max sm:w-auto mb-6 sm:pt-6">
       <div className="flex items-center justify-end max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link
@@ -58,47 +71,36 @@ const Navbar = () => {
 
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-3 bg-background/5 border border-border backdrop-blur-lg py-1 px-1 rounded-full shadow-lg w-[79.75vh] ml-4 mr-4 ">
-          {navItems.map((item) => {
-            const isTabActive = isActive(item.path);
-            return (
-              <Link
-                key={item.name}
-                to={item.path}
-                onClick={() => setActiveTab(item.name)}
-                className={cn(
-                  "relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-full transition-colors",
-                  "text-foreground/80 hover:text-primary",
-                  isTabActive && "bg-muted text-primary"
-                )}
-              >
-                <span>{item.name}</span>
-                {isTabActive && (
-                  <motion.div
-                    layoutId="lamp"
-                    className="absolute inset-0 w-full bg-primary/5 rounded-full -z-10"
-                    initial={false}
-                    transition={{
-                      type: "spring",
-                      stiffness: 300,
-                      damping: 30,
-                    }}
-                  >
-                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-primary rounded-t-full">
-                      <div className="absolute w-12 h-6 bg-primary/20 rounded-full blur-md -top-2 -left-2" />
-                      <div className="absolute w-8 h-6 bg-primary/20 rounded-full blur-md -top-1" />
-                      <div className="absolute w-4 h-4 bg-primary/20 rounded-full blur-sm top-0 left-2" />
-                    </div>
-                  </motion.div>
-                )}
-              </Link>
-            );
-          })}
+<div className="hidden md:flex items-center gap-3 bg-background/5 border border-border backdrop-blur-lg py-1 px-1 rounded-full shadow-lg w-[80.95 vh] ml-4 mr-4 ">
+  {navItems.map((item) => {
+    const isTabActive = isActive(item.path);
+    return (
+      <Link
+        key={item.name}
+        to={item.path}
+        onClick={() => setActiveTab(item.name)}
+        className={cn(
+          "relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-full transition-colors",
+          "text-foreground/80 hover:text-primary",
+          isTabActive && "bg-muted text-primary"
+        )}
+      >
+        <span>{item.name}</span>
+      </Link>
+    );
+  })}
 
-          <Button onClick={handleLogin} variant="hero" size="sm">
-            Login/Signup
-          </Button>
-        </div>
+  {isLoggedIn ? (
+    <Button onClick={handleLogout} variant="hero" size="sm" >
+      Logout
+    </Button>
+  ) : (
+    <Button onClick={LoggedIn} variant="hero" size="sm">
+      Login/Signup
+    </Button>
+  )}
+</div>
+
 
         {/* Mobile Nav Toggle */}
         <div className="md:hidden flex items-center">
@@ -134,14 +136,13 @@ const Navbar = () => {
             </Link>
           ))}
           <div className="pt-2">
-            <Button
-              onClick={handleLogin}
-              variant="hero"
-              size="sm"
-              className="w-full"
-            >
-              Login
-            </Button>
+            {!isLoggedIn && (
+            <div className="pt-2">
+              <Button onClick={LoggedIn} variant="hero" size="sm" className="w-full">
+                Login
+              </Button>
+            </div>
+          )}
           </div>
         </div>
       )}

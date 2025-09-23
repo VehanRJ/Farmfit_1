@@ -13,6 +13,9 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+  return localStorage.getItem("isLoggedIn") === "true";
+});
 
   const [loginForm, setLoginForm] = useState({
     email: "",
@@ -28,6 +31,12 @@ const Login = () => {
 
   const [tab, setTab] = useState("login");
 
+  const ishandleLogin = () => {
+  localStorage.setItem("isLoggedIn", "true"); // persist login
+  setIsLoggedIn(true); // update state immediately
+  navigate("/login");
+};
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -39,7 +48,7 @@ const Login = () => {
         title: "Login Successful",
         description: "Welcome back to AgriWatch AI!",
       });
-      navigate("/dashboard");
+      navigate("/");
     }, 1000);
   };
 
@@ -67,9 +76,10 @@ const Login = () => {
     }, 1000);
     navigate("/account-created")
   };
+  
 
   return (
-    <div className="min-h-screen bg-secondary/30 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-secondary/30 flex items-center justify-center p-4 mt-10">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -146,6 +156,7 @@ const Login = () => {
                     variant="hero"
                     className="w-full"
                     disabled={isLoading}
+                    onClick={ishandleLogin}
                   >
                     {isLoading ? "Signing in..." : "Sign In"}
                   </Button>

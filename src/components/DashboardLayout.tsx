@@ -47,14 +47,12 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-background flex mt-[5vh]">
       <div className="border-r">
         <SidebarProvider>
           <Sidebar>
-          <SidebarHeader className="p-4 border-b flex items-center justify-between">
+          <SidebarHeader className="p-4 border-b flex items-center justify-between mt-[6vh]">
             <Link to="/" className="flex items-center gap-2 font-bold">
-              <Sprout className="h-6 w-6 text-primary" />
-              AgriWatch AI
             </Link>
           </SidebarHeader>
     
