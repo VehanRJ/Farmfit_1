@@ -1,6 +1,5 @@
 import { ReactNode, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { AnimatedSidebarItem } from "./ui/animated-sidebar-item";
 
 import { 
   SidebarProvider, 
@@ -28,6 +27,7 @@ import {
   User,
   HelpCircle
 } from "lucide-react";
+import path from "path";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -42,6 +42,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     { name: "Crop Health", path: "/crop-health", icon: Sprout },
     { name: "Live Alerts", path: "/live-alerts", icon: Bell },
     { name: "Weather", path: "https://forecast-card-react.vercel.app", icon: CloudSun },
+    { name: "Environmental Conditions" , path:"/EnvironmentalConditions", icon:BarChart3}
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -65,13 +66,17 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     isActive={isActive(item.path)}
                     className="hover:bg-accent/50"
                   >
-                    <AnimatedSidebarItem 
-                      to={item.path} 
-                      icon={item.icon} 
-                      isActive={isActive(item.path)}
-                    >
-                      {item.name}
-                    </AnimatedSidebarItem>
+                   <Link 
+  to={item.path} 
+  className={`flex items-center p-2 rounded-lg transition 
+              ${isActive(item.path) ? "bg-blue-500 text-white" : "text-gray-700 hover:bg-gray-100"}`}
+>
+  {/* Render the icon if it exists */}
+  {item.icon && <item.icon className="w-5 h-5 mr-2" />}
+  
+  {/* Render the item name */}
+  <span>{item.name}</span>
+</Link>
                     
                   </SidebarMenuButton>
                 </SidebarMenuItem>

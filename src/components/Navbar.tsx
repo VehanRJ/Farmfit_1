@@ -24,6 +24,7 @@ const Navbar = () => {
     { name: "About Us", path: "/about" },
     { name: "Contact Us", path: "/contact" },
     { name: "Dashboard", path: "/dashboard" },
+    { name:"Upload Image", path:"/Upload"}
   ];
 
 
@@ -66,12 +67,12 @@ const handleLogout = () => {
   <div className="p-2 rounded-lg hero-gradient group-hover:opacity-90 transition-smooth">
     <Sprout className="h-6 w-6 text-white" />
   </div>
-  <span className="text-xl font-bold text-gradient">AgriWatch AI</span>
+  <span className="text-xl font-bold text-gradient">FarmFIT Ai</span>
 </Link>
 
 
         {/* Desktop Nav */}
-<div className="hidden md:flex items-center gap-3 bg-background/5 border border-border backdrop-blur-lg py-1 px-1 rounded-full shadow-lg w-[80.95 vh] ml-4 mr-4 ">
+<div className="hidden md:flex items-center gap-2 bg-background/5 border border-border backdrop-blur-lg py-1 px-1 rounded-full shadow-lg w-full ml-4 mr-4 flex-nowrap overflow-x-auto ">
   {navItems.map((item) => {
     const isTabActive = isActive(item.path);
     return (
@@ -81,7 +82,7 @@ const handleLogout = () => {
         onClick={() => setActiveTab(item.name)}
         className={cn(
           "relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-full transition-colors",
-          "text-foreground/80 hover:text-primary",
+          "text-foreground/80 hover:text-primary whitespace-nowrap" ,
           isTabActive && "bg-muted text-primary"
         )}
       >
