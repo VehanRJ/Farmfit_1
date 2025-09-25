@@ -21,10 +21,13 @@ import Dashboard from "./pages/Dashboard";
 import Upload from "./pages/Upload";
 import NotFound from "./pages/NotFound";
 import PageWrapper from "./components/PageWrapper";
+import Navbarmini from "./components/Navbar_mini";
+import Layoutnew from "./components/Layout_new";
 const CropHealth = lazy(() => import("./pages/CropHealth"));
 const LiveAlerts = lazy(() => import("./pages/LiveAlerts"));
 const Weather = lazy(() => import("./pages/Weather"));
 const EnvironmentalConditions = lazy(() => import("./components/EnvironmentalConditions"));
+
 
 const queryClient = new QueryClient();
 
@@ -43,12 +46,12 @@ function AnimatedRoutes() {
         <Route path="/about" element={<Layout><PageWrapper><About /></PageWrapper></Layout>} />
         <Route path="/contact" element={<Layout><PageWrapper><Contact /></PageWrapper></Layout>} />
         {/* 👇 Dashboard gets macOS-style opening */}
-        <Route path="/dashboard" element={<Upper><DashboardLayout><Dashboard /></DashboardLayout></Upper>} />
-        <Route path="/crop-health" element={<DashboardLayout><CropHealth /></DashboardLayout>} />
-        <Route path="/live-alerts" element={<DashboardLayout><LiveAlerts /></DashboardLayout>} />
+        <Route path="/dashboard" element={<Layoutnew><DashboardLayout><Dashboard /></DashboardLayout></Layoutnew>} />
+        <Route path="/crop-health" element={<Layoutnew><DashboardLayout><CropHealth /></DashboardLayout></Layoutnew>} />
+        <Route path="/live-alerts" element={<Layoutnew><DashboardLayout><LiveAlerts /></DashboardLayout></Layoutnew>} />
         <Route path="/weather" element={<DashboardLayout><Weather /></DashboardLayout>} />
         
-        <Route path="/EnvironmentalConditions" element={<DashboardLayout><EnvironmentalConditions /></DashboardLayout>} />
+        <Route path="/EnvironmentalConditions" element={<Layoutnew><DashboardLayout><EnvironmentalConditions /></DashboardLayout></Layoutnew>} />
 
       </Routes>
     </AnimatePresence>

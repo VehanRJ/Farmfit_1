@@ -59,7 +59,7 @@ const Upload = () => {
               type="file"
               id="crop-image"
               accept=".jpg,.jpeg,.png"
-              className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+              className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 hover:file:cursor-pointer"
               onChange={(e) => handleFileChange(e, "image")}
             />
             {cropImage && (
@@ -78,7 +78,7 @@ const Upload = () => {
               type="file"
               id="sensor-data"
               accept=".csv"
-              className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+              className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 hover:file:cursor-pointer"
               onChange={(e) => handleFileChange(e, "csv")}
             />
             {sensorData && (
@@ -94,8 +94,8 @@ const Upload = () => {
             disabled={!cropImage || !sensorData || isUploading}
             className={`w-full py-3 px-6 rounded-full font-semibold transition-all duration-300 ${
               isUploading
-                ? "bg-green-400 cursor-not-allowed"
-                : "bg-green-600 hover:bg-green-700 text-white shadow-lg"
+                ? "bg-green-400"
+                : "bg-green-600 hover:bg-green-700 hover:cursor-pointer text-white shadow-lg "
             }`}
           >
             {isUploading ? "Uploading..." : "Upload & Get Analytics"}

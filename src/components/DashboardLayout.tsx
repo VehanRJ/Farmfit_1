@@ -41,21 +41,25 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { name: "Crop Health", path: "/crop-health", icon: Sprout },
     { name: "Live Alerts", path: "/live-alerts", icon: Bell },
-    { name: "Weather", path: "https://forecast-card-react.vercel.app", icon: CloudSun },
+    { name: "Weather", path: "/weather", icon: CloudSun },
     { name: "Environmental Conditions" , path:"/EnvironmentalConditions", icon:BarChart3}
   ];
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <div className="min-h-screen bg-background flex mt-[5vh]">
+    <div className="min-h-screen bg-background flex mt-[8vh]">
       <div className="border-r">
         <SidebarProvider>
           <Sidebar>
-          <SidebarHeader className="p-4 border-b flex items-center justify-between mt-[6vh]">
-            <Link to="/" className="flex items-center gap-2 font-bold">
-            </Link>
-          </SidebarHeader>
+          <SidebarHeader className="p-4 border-b flex items-center justify-between mt-[1vh]">
+  <Link to="/" className="flex items-center gap-2 font-bold px-3 py-2">
+    <div className="p-2 rounded-lg hero-gradient group-hover:opacity-90 transition-smooth">
+    <Sprout className="h-6 w-6 text-white" />
+   </div>
+    <span className="text-xl font-bold text-gradient">FarmFIT Ai</span>
+  </Link>
+</SidebarHeader> 
     
           <SidebarContent className="p-2">
             <SidebarMenu>

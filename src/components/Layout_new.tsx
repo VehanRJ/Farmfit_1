@@ -1,12 +1,13 @@
 import { ReactNode } from "react";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import Navbarmini from "./Navbar_mini";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-const Layout = ({ children }: LayoutProps) => {
+const Layoutnew = ({ children }: LayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbarmini />
@@ -17,4 +18,4 @@ const Layout = ({ children }: LayoutProps) => {
   );
 };
 
-export default Layout;
+export default Layoutnew;
