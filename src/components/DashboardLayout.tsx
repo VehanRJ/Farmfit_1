@@ -41,7 +41,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { name: "Crop Health", path: "/crop-health", icon: Sprout },
     { name: "Live Alerts", path: "/live-alerts", icon: Bell },
-    { name: "Weather", path: "/weather", icon: CloudSun },
+    { name: "Weather", path: "https://forecast-card-react.vercel.app", icon: CloudSun },
   ];
 
   const isActive = (path: string) => location.pathname === path;
