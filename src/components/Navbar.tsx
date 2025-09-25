@@ -62,7 +62,7 @@ const handleLogout = () => {
         {/* Logo */}
         <Link
   to="/"
-  className="fixed top-4 flex left-[-49vh] items-center space-x-2 group z-50 backdrop-blur-md bg-white/20 px-3 py-2 rounded-lg shadow-lg"
+  className="fixed top-4 flex left-[-45vh] items-center space-x-2 group z-50 backdrop-blur-md bg-white/20 px-3 py-2 rounded-lg shadow-lg"
 >
   <div className="p-2 rounded-lg hero-gradient group-hover:opacity-90 transition-smooth">
     <Sprout className="h-6 w-6 text-white" />
@@ -72,7 +72,7 @@ const handleLogout = () => {
 
 
         {/* Desktop Nav */}
-<div className="hidden md:flex items-center gap-2 bg-background/5 border border-border backdrop-blur-lg py-1 px-1 rounded-full shadow-lg w-full ml-4 mr-4 flex-nowrap overflow-x-auto ">
+<div className="hidden md:flex items-center gap-2 bg-background/5 border border-border backdrop-blur-lg py-1 px-1 rounded-full shadow-lg w-full ml-4 mr-4">
   {navItems.map((item) => {
     const isTabActive = isActive(item.path);
     return (
