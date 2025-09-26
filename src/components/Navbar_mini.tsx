@@ -7,7 +7,7 @@ import { Menu, X, Sprout } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const Navbar = () => {
+const Navbarmini = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Home");
   const [isMobile, setIsMobile] = useState(false);
@@ -59,18 +59,6 @@ const handleLogout = () => {
   return (
     <nav className="fixed left-1/2 -translate-x-1/2 z-50 w-max sm:w-auto mb-6 sm:pt-6">
       <div className="flex items-center justify-end max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
-        <Link
-  to="/"
-  className="fixed top-4 flex left-[-42vh] items-center space-x-2 group z-50 backdrop-blur-md bg-white/20 px-3 py-2 rounded-lg shadow-lg"
->
-  <div className="p-2 rounded-lg hero-gradient group-hover:opacity-90 transition-smooth">
-    <Sprout className="h-6 w-6 text-white" />
-  </div>
-  <span className="text-xl font-bold text-gradient">FarmFIT Ai</span>
-</Link>
-
-
         {/* Desktop Nav */}
 <div className="hidden md:flex items-center gap-2 bg-background/5 border border-border backdrop-blur-lg py-1 px-1 rounded-full shadow-lg w-full ml-4 mr-4">
   {navItems.map((item) => {
@@ -151,4 +139,4 @@ const handleLogout = () => {
   );
 };
 
-export default Navbar;
+export default Navbarmini;

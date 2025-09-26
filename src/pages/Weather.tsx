@@ -1,74 +1,157 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Cloud, CloudDrizzle, CloudFog, CloudLightning, CloudRain, CloudSun, Sun, Droplets, Wind, Umbrella } from 'lucide-react';
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Cloud, Sun, CloudRain, CloudSnow } from "lucide-react";
+import axios from "axios";
 
-const weatherData = {
-  current: {
-    temp: 28,
-    description: 'Partly cloudy',
-    icon: <CloudSun className="h-16 w-16 text-yellow-400" />,
-    details: {
-      humidity: '72%',
-      wind: '12 km/h',
-      precipitation: '5%',
-    },
-  },
-  forecast: [
-    { day: 'Mon', temp: 29, icon: <Sun className="h-8 w-8 text-yellow-400" /> },
-    { day: 'Tue', temp: 27, icon: <CloudSun className="h-8 w-8 text-gray-400" /> },
-    { day: 'Wed', temp: 25, icon: <CloudRain className="h-8 w-8 text-blue-400" /> },
-    { day: 'Thu', temp: 26, icon: <CloudDrizzle className="h-8 w-8 text-blue-300" /> },
-    { day: 'Fri', temp: 30, icon: <Sun className="h-8 w-8 text-yellow-400" /> },
-    { day: 'Sat', temp: 28, icon: <CloudLightning className="h-8 w-8 text-purple-400" /> },
-    { day: 'Sun', temp: 24, icon: <CloudFog className="h-8 w-8 text-gray-500" /> },
-  ],
+// Use the same API key for both Geocoding and Weather APIs
+const GEO_KEY = "";
+const WEATHER_KEY = "";
+
+const WeatherIcon = ({ condition, className }: { condition: string; className?: string }) => {
+  switch (condition) {
+    case "Sunny":
+      return <Sun className={className} />;
+    case "Partly Cloudy":
+      return <Cloud className={className} />;
+    case "Cloudy":
+      return <Cloud className={className} />;
+    case "Rainy":
+      return <CloudRain className={className} />;
+    case "Snowy":
+      return <CloudSnow className={className} />;
+    default:
+      return <Cloud className={className} />;
+  }
 };
 
-export default function Weather() {
+const WeatherStatus = () => {
+  const [location, setLocation] = useState("");
+  const [weatherData, setWeatherData] = useState<any>(null);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const fetchWeather = async () => {
+    if (!location) {
+      setError("Please enter a location");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+    setWeatherData(null);
+
+    try {
+      // 1️⃣ Get latitude & longitude from Geocoding API
+      const geocodeRes = await axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+          location
+        )}&key=${GEO_KEY}`
+      );
+
+      const results = geocodeRes.data.results;
+      if (!results || results.length === 0) {
+        setError("Location not found");
+        setLoading(false);
+        return;
+      }
+
+      const lat = results[0].geometry.location.lat;
+      const lng = results[0].geometry.location.lng;
+
+      // 2️⃣ Fetch weather using Google Weather API
+      const weatherRes = await axios.get(
+        `https://weather.googleapis.com/v1/currentConditions:lookup?key=${WEATHER_KEY}&location.latitude=${lat}&location.longitude=${lng}`
+      );
+
+      if (!weatherRes.data || !weatherRes.data.currentConditions) {
+        setError("Weather data not found");
+      } else {
+        // Map Google API response to match your card structure
+        const current = {
+          temp: weatherRes.data.currentConditions.temperature,
+          condition: weatherRes.data.currentConditions.weather,
+          humidity: weatherRes.data.currentConditions.humidity ?? 0,
+          wind: weatherRes.data.currentConditions.wind ?? 0,
+        };
+
+        // Optional: For demo, mock a 5-day forecast
+        const forecast = [
+          { day: "Mon", temp: current.temp + 1, condition: "Sunny" },
+          { day: "Tue", temp: current.temp - 2, condition: "Rainy" },
+          { day: "Wed", temp: current.temp + 2, condition: "Sunny" },
+          { day: "Thu", temp: current.temp, condition: "Cloudy" },
+          { day: "Fri", temp: current.temp + 3, condition: "Sunny" },
+        ];
+
+        setWeatherData({ current, forecast });
+      }
+    } catch (err: any) {
+      console.error(err);
+      setError("Failed to fetch weather data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <Card className="card-gradient border-0 h-full">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <CloudSun className="h-5 w-5 text-primary" />
-          Weather Status
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Current Weather */}
-          <div className="md:col-span-1 flex flex-col items-center justify-center text-center p-4 rounded-lg bg-primary/10">
-            {weatherData.current.icon}
-            <p className="text-5xl font-bold mt-2">{weatherData.current.temp}°C</p>
-            <p className="text-muted-foreground">{weatherData.current.description}</p>
-            <div className="flex gap-4 mt-4 text-muted-foreground">
-              <div className="flex items-center gap-1">
-                <Droplets className="h-4 w-4" />
-                <span>{weatherData.current.details.humidity}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Wind className="h-4 w-4" />
-                <span>{weatherData.current.details.wind}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Umbrella className="h-4 w-4" />
-                <span>{weatherData.current.details.precipitation}</span>
+    <div className="space-y-4">
+      {/* Location input */}
+      <div className="flex gap-2 items-center">
+        <input
+          type="text"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          placeholder="Enter location"
+          className="border p-2 rounded flex-1"
+        />
+        <button
+          onClick={fetchWeather}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+        >
+          Show Weather
+        </button>
+      </div>
+
+      {/* Loading / Error */}
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-600">{error}</p>}
+
+      {/* Weather Card */}
+      {weatherData && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Weather in {location}</CardTitle>
+          </CardHeader>
+          <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+            <div className="flex flex-col items-center justify-center text-center col-span-1">
+              <WeatherIcon
+                condition={weatherData.current.condition}
+                className="w-16 h-16 mb-2"
+              />
+              <p className="text-5xl font-bold">{weatherData.current.temp}°C</p>
+              <p className="text-muted-foreground">{weatherData.current.condition}</p>
+              <div className="flex gap-4 mt-4 text-sm text-muted-foreground">
+                <span>Humidity: {weatherData.current.humidity}%</span>
+                <span>Wind: {weatherData.current.wind} km/h</span>
               </div>
             </div>
-          </div>
-
-          {/* 7-Day Forecast */}
-          <div className="md:col-span-2">
-            <div className="grid grid-cols-4 sm:grid-cols-7 gap-2 text-center">
-              {weatherData.forecast.map((day) => (
-                <div key={day.day} className="flex flex-col items-center space-y-1 p-2 rounded-lg hover:bg-primary/10">
-                  <p className="font-semibold text-sm">{day.day}</p>
-                  {day.icon}
-                  <p className="text-sm text-muted-foreground">{day.temp}°C</p>
+            <div className="md:col-span-2 grid grid-cols-5 gap-2">
+              {weatherData.forecast.map((day: any) => (
+                <div
+                  key={day.day}
+                  className="flex flex-col items-center p-2 rounded-lg bg-accent/50"
+                >
+                  <p className="font-semibold">{day.day}</p>
+                  <WeatherIcon condition={day.condition} className="w-8 h-8 my-2" />
+                  <p>{day.temp}°</p>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+          </CardContent>
+        </Card>
+      )}
+    </div>
   );
-}
+};
+
+export default WeatherStatus;

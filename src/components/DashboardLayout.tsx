@@ -1,6 +1,5 @@
 import { ReactNode, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { AnimatedSidebarItem } from "./ui/animated-sidebar-item";
 
 import { 
   SidebarProvider, 
@@ -28,6 +27,7 @@ import {
   User,
   HelpCircle
 } from "lucide-react";
+import path from "path";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -42,19 +42,27 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     { name: "Crop Health", path: "/crop-health", icon: Sprout },
     { name: "Live Alerts", path: "/live-alerts", icon: Bell },
     { name: "Weather", path: "/weather", icon: CloudSun },
+<<<<<<< HEAD
+=======
+    { name: "Environmental Conditions" , path:"/EnvironmentalConditions", icon:BarChart3}
+>>>>>>> a90941cebb6da71ff02817df5771bfeb7fb7f63d
   ];
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <div className="min-h-screen bg-background flex mt-[5vh]">
+    <div className="min-h-screen bg-background flex mt-[8vh]">
       <div className="border-r">
         <SidebarProvider>
           <Sidebar>
-          <SidebarHeader className="p-4 border-b flex items-center justify-between mt-[6vh]">
-            <Link to="/" className="flex items-center gap-2 font-bold">
-            </Link>
-          </SidebarHeader>
+          <SidebarHeader className="p-4 border-b flex items-center justify-between mt-[1vh]">
+  <Link to="/" className="flex items-center gap-2 font-bold px-3 py-2">
+    <div className="p-2 rounded-lg hero-gradient group-hover:opacity-90 transition-smooth">
+    <Sprout className="h-6 w-6 text-white" />
+   </div>
+    <span className="text-xl font-bold text-gradient">FarmFIT Ai</span>
+  </Link>
+</SidebarHeader> 
     
           <SidebarContent className="p-2">
             <SidebarMenu>
@@ -65,13 +73,17 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     isActive={isActive(item.path)}
                     className="hover:bg-accent/50"
                   >
-                    <AnimatedSidebarItem 
-                      to={item.path} 
-                      icon={item.icon} 
-                      isActive={isActive(item.path)}
-                    >
-                      {item.name}
-                    </AnimatedSidebarItem>
+                   <Link 
+  to={item.path} 
+  className={`flex items-center p-2 rounded-lg transition 
+              ${isActive(item.path) ? "bg-blue-500 text-white" : "text-gray-700 hover:bg-gray-100"}`}
+>
+  {/* Render the icon if it exists */}
+  {item.icon && <item.icon className="w-5 h-5 mr-2" />}
+  
+  {/* Render the item name */}
+  <span>{item.name}</span>
+</Link>
                     
                   </SidebarMenuButton>
                 </SidebarMenuItem>
