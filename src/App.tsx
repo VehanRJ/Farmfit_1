@@ -6,7 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
-
+import Indexcopy from "./pages/Indexcopy";
+import NotFoundcopy from "./pages/NotFoundcopy";
 
 import DashboardLayout from "@/components/DashboardLayout";
 import AccountCreated from "./components/AccountCreated";
@@ -43,7 +44,7 @@ function AnimatedRoutes() {
         <Route path="/dashboard" element={<Upper><DashboardLayout><Dashboard /></DashboardLayout></Upper>} />
         <Route path="/crop-health" element={<DashboardLayout><CropHealth /></DashboardLayout>} />
         <Route path="/live-alerts" element={<DashboardLayout><LiveAlerts /></DashboardLayout>} />
-        <Route path="/weather" element={<DashboardLayout><Weather /></DashboardLayout>} />
+        <Route path="/weather" element={<DashboardLayout><Indexcopy/></DashboardLayout>} />
       </Routes>
     </AnimatePresence>
   );
