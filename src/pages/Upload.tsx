@@ -1,105 +1,153 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Upload = () => {
   const [cropImage, setCropImage] = useState(null);
-  const [sensorData, setSensorData] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [predictionData, setPredictionData] = useState(null);
 
-  const navigate = useNavigate();
-
-  const handleFileChange = (e, fileType) => {
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (fileType === "image") {
-      setCropImage(file);
-    } else {
-      setSensorData(file);
-    }
+    setCropImage(file);
+    setImagePreview(file ? URL.createObjectURL(file) : null);
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     setErrorMessage("");
+    setPredictionData(null);
 
-    if (!cropImage || !sensorData) {
-      setErrorMessage("Please select both a crop image and a sensor data file.");
+    if (!cropImage) {
+      setErrorMessage("Please select a crop image before uploading.");
       return;
     }
 
     setIsUploading(true);
-    setTimeout(() => {
+
+    try {
+      const formData = new FormData();
+      formData.append("file", cropImage);
+
+      // Optional: simulate a small delay for loading animation
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      const response = await axios.post("http://localhost:8000/predict", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      // Optional: small delay before showing results
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      setPredictionData(response.data);
+    } catch (error) {
+      console.error("Upload/Prediction failed:", error);
+      setErrorMessage("Failed to get prediction from server.");
+    } finally {
       setIsUploading(false);
-      navigate("./Dashboard"); // ✅ go to dashboard route
-    }, 2000);
+    }
+  };
+
+  const getResultBgColor = () => {
+    if (!predictionData) return "bg-green-50";
+    return predictionData.Status === "Healthy" ? "bg-green-50" : "bg-red-50";
+  };
+  const getBorderColor = () => {
+    if (!predictionData) return "border-green-200";
+    return predictionData.Status === "Healthy" ? "border-green-200" : "border-red-400";
+  };
+  const getTextColor = () => {
+    if (!predictionData) return "text-gray-700";
+    return predictionData.Status === "Healthy" ? "text-green-800" : "text-red-800";
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-green-50 p-4 sm:p-6 lg:p-8">
-      <div className="bg-white p-8 rounded-2xl shadow-xl max-w-lg w-full">
-        <h1 className="text-3xl font-bold text-center text-green-700 mb-6">
-          Crop Data Uploader
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-6xl p-10">
+        <h1 className="text-4xl font-bold text-center text-green-700 mb-6">
+          Crop Disease Analyzer
         </h1>
-        <p className="text-center text-gray-600 mb-8">
-          Upload your crop image and sensor data CSV to get started with analytics.
+        <p className="text-center text-gray-600 mb-12 text-lg">
+          Upload your crop image to get disease prediction and treatment solutions.
         </p>
 
         {errorMessage && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-            <span>{errorMessage}</span>
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6 text-center">
+            {errorMessage}
           </div>
         )}
 
-        <div className="flex flex-col gap-5">
-          {/* Image Upload */}
-          <div className="flex flex-col items-start gap-2">
-            <label htmlFor="crop-image" className="text-gray-700 font-medium">
-              Crop Image (JPG/PNG)
+        <div className="flex flex-col lg:flex-row gap-10">
+          {/* Left: Image Upload & Preview */}
+          <div className="flex flex-col items-center gap-4 w-full lg:w-1/2">
+            <label
+              htmlFor="crop-image"
+              className="text-lg font-medium text-gray-700"
+            >
+              Select Crop Image (JPG/PNG)
             </label>
             <input
               type="file"
               id="crop-image"
               accept=".jpg,.jpeg,.png"
-              className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 hover:file:cursor-pointer"
-              onChange={(e) => handleFileChange(e, "image")}
+              className="w-full text-gray-500 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 hover:cursor-pointer"
+              onChange={handleFileChange}
             />
-            {cropImage && (
-              <span className="text-green-500 text-sm mt-1">
-                Selected: {cropImage.name}
-              </span>
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="w-32 h-32 object-cover rounded-lg shadow-md border border-gray-300 mt-4"
+              />
+            )}
+            <button
+              onClick={handleUpload}
+              disabled={isUploading}
+              className={`mt-6 w-full py-3 px-6 rounded-full font-semibold text-white shadow-lg transition-all duration-300 ${
+                isUploading
+                  ? "bg-green-400"
+                  : "bg-green-600 hover:bg-green-700 hover:cursor-pointer"
+              }`}
+            >
+              {isUploading ? "Analyzing..." : "Upload & Get Analytics"}
+            </button>
+
+            {/* Loading Spinner */}
+            {isUploading && (
+              <div className="flex justify-center mt-4">
+                <div className="w-12 h-12 border-4 border-green-300 border-t-green-600 rounded-full animate-spin"></div>
+              </div>
             )}
           </div>
 
-          {/* CSV Upload */}
-          <div className="flex flex-col items-start gap-2">
-            <label htmlFor="sensor-data" className="text-gray-700 font-medium">
-              Sensor Data (CSV)
-            </label>
-            <input
-              type="file"
-              id="sensor-data"
-              accept=".csv"
-              className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 hover:file:cursor-pointer"
-              onChange={(e) => handleFileChange(e, "csv")}
-            />
-            {sensorData && (
-              <span className="text-green-500 text-sm mt-1">
-                Selected: {sensorData.name}
-              </span>
-            )}
-          </div>
-
-          {/* Upload Button */}
-          <button
-            onClick={handleUpload}
-            disabled={!cropImage || !sensorData || isUploading}
-            className={`w-full py-3 px-6 rounded-full font-semibold transition-all duration-300 ${
-              isUploading
-                ? "bg-green-400"
-                : "bg-green-600 hover:bg-green-700 hover:cursor-pointer text-white shadow-lg "
-            }`}
-          >
-            {isUploading ? "Uploading..." : "Upload & Get Analytics"}
-          </button>
+          {/* Right: Prediction Results */}
+          {predictionData && !isUploading && (
+            <div
+              className={`flex-1 p-6 rounded-2xl shadow-lg border ${getBorderColor()} ${getResultBgColor()} flex flex-col justify-center`}
+            >
+              <h2 className={`text-3xl font-semibold mb-6 ${getTextColor()}`}>
+                Prediction Results
+              </h2>
+              <div className="grid grid-cols-1 gap-3">
+                <p className="text-lg"><strong>Status:</strong> {predictionData.Status}</p>
+                <p className="text-lg"><strong>Message:</strong> {predictionData.message}</p>
+                <p className="text-lg"><strong>Confidence:</strong> {predictionData.confidence}</p>
+              </div>
+              {predictionData.solutions && (
+                <div className="mt-6">
+                  <strong className="text-lg">Solutions:</strong>
+                  <ul className="list-disc ml-6 mt-2 text-gray-700 space-y-1">
+                    {Array.isArray(predictionData.solutions)
+                      ? predictionData.solutions.map((sol, idx) => (
+                          <li key={idx}>{sol}</li>
+                        ))
+                      : <li>{predictionData.solutions}</li>
+                    }
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

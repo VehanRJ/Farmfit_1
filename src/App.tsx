@@ -50,7 +50,7 @@ function AnimatedRoutes() {
   <Route path="/dashboard" element={<Layoutnew><DashboardLayout><Dashboard /></DashboardLayout></Layoutnew>} />
   <Route path="/crop-health" element={<Layoutnew><DashboardLayout><CropHealth /></DashboardLayout></Layoutnew>} />
   <Route path="/live-alerts" element={<Layoutnew><DashboardLayout><LiveAlerts /></DashboardLayout></Layoutnew>} />
-  <Route path="/weather" element={<DashboardLayout><Indexcopy /></DashboardLayout>} />
+  <Route path="/weather" element={<Layoutnew><DashboardLayout><Indexcopy /></DashboardLayout></Layoutnew>} />
   <Route path="/EnvironmentalConditions" element={<Layoutnew><DashboardLayout><EnvironmentalConditions /></DashboardLayout></Layoutnew>} />
       </Routes>
     </AnimatePresence>

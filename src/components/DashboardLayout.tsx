@@ -88,18 +88,11 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               ))}
             </SidebarMenu>
           </SidebarContent>
-    
-          <SidebarFooter className="p-4 border-t">
-            <Button variant="ghost" className="w-full justify-start">
-              <LogOut className="h-4 w-4 mr-2" />
-              Logout
-            </Button>
-          </SidebarFooter>
         </Sidebar>
         </SidebarProvider>
       </div>
 
-      <main className="flex-1 p-8 overflow-auto">
+      <main className="flex-1 p-8 overflow-auto mt-[0vh]">
         <div className="max-w-7xl mx-auto space-y-6">
           
           <div className="flex items-center justify-between">
