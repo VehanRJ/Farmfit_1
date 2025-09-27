@@ -42,15 +42,13 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     { name: "Crop Health", path: "/crop-health", icon: Sprout },
     { name: "Live Alerts", path: "/live-alerts", icon: Bell },
     { name: "Weather", path: "/weather", icon: CloudSun },
-<<<<<<< HEAD
-=======
-    { name: "Environmental Conditions" , path:"/EnvironmentalConditions", icon:BarChart3}
->>>>>>> a90941cebb6da71ff02817df5771bfeb7fb7f63d
+    { name: "Environmental Conditions", path: "/EnvironmentalConditions", icon: BarChart3 }
   ];
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
+
     <div className="min-h-screen bg-background flex mt-[8vh]">
       <div className="border-r">
         <SidebarProvider>
